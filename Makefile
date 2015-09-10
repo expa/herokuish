@@ -51,4 +51,12 @@ release: build
 	gh-release create gliderlabs/$(NAME) $(VERSION) \
 		$(shell git rev-parse --abbrev-ref HEAD) v$(VERSION)
 
-.PHONY: build
+expa-build: clean build-in-docker
+	@$(QUIET) rm -f ./stack/.scipy
+	docker build -f Dockerfile.expa -t herokuish:expa .
+
+expa-build-scipy: clean build-in-docker
+	@$(QUIET) touch ./stack/.scipy
+	docker build -f Dockerfile.expa -t herokuish:expa .
+
+.PHONY: build build-in-docker expa-build expa-build-scipy

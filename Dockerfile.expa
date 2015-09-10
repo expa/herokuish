@@ -1,0 +1,6 @@
+FROM herokuish:dev
+ENV LC_ALL C
+ENV DEBIAN_FRONTEND noninteractive
+
+ADD ./stack/ /stack
+RUN /stack/add_ons.sh && rm -rf /stack

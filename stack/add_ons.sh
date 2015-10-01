@@ -26,3 +26,20 @@ for file in libjpeg.so libfreetype.so libz.so; do
 done
 
 [[ -d /usr/include/freetype2 ]] && ln -s /usr/include/freetype2 /usr/include/freetype2/freetype
+
+# Create persistent user
+userid=32768
+username=expauser
+
+addgroup --quiet --gid "$userid" "$username"
+adduser \
+    --shell /bin/bash \
+    --disabled-password \
+    --force-badname \
+    --no-create-home \
+    --uid "$userid" \
+    --gid "$userid" \
+    --gecos '' \
+    --quiet \
+    --home /app \
+    "$username"

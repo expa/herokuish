@@ -1,6 +1,8 @@
 #/bin/bash
 IMAGE_NAME=herokuish:expa
 S3_BUCKET_NAME=expa-dokku
+USER_DEST_PREFIX="$1"
+DESTINATION_PREFIX=${USER_DEST_PREFIX:="expa"}
 
 fatal() {
     REASON=$1
@@ -29,11 +31,13 @@ echo ""
 [[ -f /tmp/tgz ]] && rm /tmp/tgz
 ID=$(docker run -d $IMAGE_NAME /bin/sh)
 SHORTID=${ID:0:10}
+DESTINATION_FILENAME=${DESTINATION_PREFIX}_herokuish_${SHORTID}.tgz
+
 if [[ -e './stack/.scipy' ]];then
-  DESTINATION=s3://$S3_BUCKET_NAME/expa_scipy_herokuish_${SHORTID}.tgz
-else
-  DESTINATION=s3://$S3_BUCKET_NAME/expa_herokuish_${SHORTID}.tgz
+  DESTINATION_FILENAME=${DESTINATION_PREFIX}_scipy_herokuish_${SHORTID}.tgz
 fi
+
+DESTINATION=s3://$S3_BUCKET_NAME/${DESTINATION_FILENAME}
 
 echo "exporting $ID"
 docker export $ID | gzip -9c > /tmp/tgz || exit 1

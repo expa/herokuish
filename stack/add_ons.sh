@@ -15,7 +15,9 @@ wget -qO- http://download.rethinkdb.com/apt/pubkey.gpg | apt-key add -
 #
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-xargs apt-get install -y < /stack/${packages_file}
+cp /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml.custom
+xargs apt-get install -y -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confnew < /stack/${packages_file}
+mv /etc/ImageMagick-6/policy.xml.custom /etc/ImageMagick-6/policy.xml
 apt-get autoclean autoremove -y
 
 #

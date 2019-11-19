@@ -7,7 +7,7 @@ A command line tool for emulating Heroku build and runtime tasks in containers.
 
 Herokuish is made for platform authors. The project consolidates and decouples Heroku compatibility logic (running buildpacks, parsing Procfile) and supporting workflow (importing/exporting slugs) from specific platform images like those in Dokku/Buildstep, Deis, Flynn, etc.
 
-The goal is to be the definitive, well maintained and heavily tested Heroku emulation utility shared by all. It is complemented by [progrium/cedarish](https://github.com/progrium/cedarish), which focuses on reproducing the base Heroku system image. Together they form a toolkit for achieving Heroku compatibility.
+The goal is to be the definitive, well maintained and heavily tested Heroku emulation utility shared by all. It is based on the [Cedar Heroku:18 system image](https://github.com/heroku/stack-images). Together they form a toolkit for achieving Heroku compatibility.
 
 Herokuish is a community project and is in no way affiliated with Heroku.
 
@@ -18,7 +18,7 @@ Download and uncompress the latest binary tarball from [releases](https://github
 For example, you can do this directly in your Dockerfiles installing into `/bin` as one step:
 
 ```
-RUN curl --silent http://dl.gliderlabs.com/herokuish/latest/linux_x86_64.tgz \
+RUN curl --location --silent https://github.com/gliderlabs/herokuish/releases/download/v0.5.3/herokuish_0.5.3_linux_x86_64.tgz \
 		  | tar -xzC /bin
 ```
 
@@ -36,6 +36,7 @@ Available commands:
     build                    Build an application using installed buildpacks
     install                  Install buildpack from Git URL and optional committish
     list                     List installed buildpacks
+    test                     Build and run tests for an application using installed buildpacks
   help                     Shows help information for a command
   paths                    Shows path settings
   procfile                 Use Procfiles and run app commands
@@ -54,6 +55,9 @@ Available commands:
 Main functionality revolves around buildpack commands, procfile/exec commands, and slug commands. They are made to work together, but can be used independently or not at all.
 
 For example, build processes that produce Docker images without producing intermediary slugs can ignore slug commands. Similarly, non-buildpack runtime images such as [google/python-runtime](https://github.com/GoogleCloudPlatform/python-docker/tree/master/runtime) might find procfile commands useful just to support Procfiles.
+
+`herokuish exec` will by default drop root privileges through use of [setuidgid](https://cr.yp.to/daemontools/setuidgid.html),
+but if already running as a non-root user setuidgid will fail, you can opt-out from this by setting the env-var `HEROKUISH_SETUIDGUID=false`.
 
 #### Buildpacks
 
@@ -141,6 +145,26 @@ Mounting your local app source directory to `/tmp/app` and running `/bin/herokui
 ```
 
 You can use this output when you submit issues.
+
+#### Running an app tests using Heroku buildpacks
+
+```
+$ docker run --rm -v /abs/app/path:/tmp/app gliderlabs/herokuish /bin/herokuish buildpack test
+```
+
+Mounting your local app source directory to `/tmp/app` and running `/bin/herokuish buildpack test` will run your app through the buildpack test-compile process. Then it will run `test` command to execute application tests.
+
+```
+-----> Ruby app detected
+-----> Setting up Test for Ruby/Rack
+-----> Using Ruby version: ruby-2.3.3
+  ...
+-----> Detecting rake tasks
+-----> Running test: bundle exec rspec
+       .
+       Finished in 0.00239 seconds (files took 0.07525 seconds to load)
+       1 example, 0 failures
+```
 
 #### Troubleshooting
 

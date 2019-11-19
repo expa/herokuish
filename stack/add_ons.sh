@@ -13,9 +13,10 @@ wget -qO- http://download.rethinkdb.com/apt/pubkey.gpg | apt-key add -
 #
 # SYSTEM PACKAGES
 #
+export DEBIAN_FRONTEND=noninteractive
 apt-get update
-xargs apt-get install -y --force-yes < /stack/${packages_file}
-apt-get clean
+xargs apt-get install -y < /stack/${packages_file}
+apt-get autoclean autoremove -y
 
 #
 # PIL library patch

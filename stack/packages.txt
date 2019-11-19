@@ -1,8 +1,8 @@
 libffi-dev
 libjpeg62
 liblcms2-dev
-libpng12-0
-libpng12-dev
+libpng16-16
+libpng-dev
 libmagickcore-dev
 libmcrypt-dev
 libsqlite3-dev
@@ -11,11 +11,11 @@ mercurial
 mysql-client
 net-tools
 nodejs
-openjdk-7-jdk
-openjdk-7-jre-headless
-postgresql
-postgresql-server-dev-9.3
-rethinkdb=1.14.1*
+openjdk-8-jdk
+openjdk-8-jre-headless
+postgresql-11
+postgresql-server-dev-11
+rethinkdb=
 sqlite3
 supervisor
 unzip

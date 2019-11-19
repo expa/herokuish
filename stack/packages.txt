@@ -15,7 +15,7 @@ openjdk-8-jdk
 openjdk-8-jre-headless
 postgresql-11
 postgresql-server-dev-11
-rethinkdb=
+rethinkdb=2.3.7~0bionic
 sqlite3
 supervisor
 unzip

@@ -3,7 +3,7 @@ FROM golang:1.12.0
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -qq \
- && apt-get install -qq -y --force-yes \
+ && apt-get install -qq -yy \
      apt-transport-https \
      apt-utils \
      ca-certificates \
@@ -14,6 +14,6 @@ RUN apt-get update -qq \
  && add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable"
 RUN apt-get update -qq \
- && apt-get install -qq -y --force-yes docker-ce=17.12.0~ce-0~debian
+ && apt-get install -qq -yy docker-ce=17.12.0~ce-0~debian
 
 WORKDIR /src

@@ -99,10 +99,10 @@ bumpup:
 		fi ; \
 	done
 
-expa-build: clean build-in-docker
+expa-build: build-in-docker
 	@$(QUIET) rm -f ./stack/.scipy
 	docker build -f Dockerfile.expa -t herokuish:expa .
 
-expa-build-scipy: clean build-in-docker
+expa-build-scipy: build-in-docker
 	@$(QUIET) touch ./stack/.scipy
 	docker build -f Dockerfile.expa -t herokuish:expa .
